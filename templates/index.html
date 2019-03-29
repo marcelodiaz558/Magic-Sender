@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Icon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="../static/icons/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../static/icons/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../static/icons/favicon/favicon-16x16.png">
+        <link rel="manifest" href="../static/icons/favicon/site.webmanifest">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../static/bootstrap.min.css">
+
+        <!-- Personal CSS c-->
+        <link rel="stylesheet" href="../static/styles.css">
+
+        <title>Magic Sender</title>
+
+    </head>
+    <body style="font-family: sans-serif" class="bg-dark">
+        <div class="container-fluid">
+           <main>
+                <div class="row orange">
+                    <div class="col-sm-12">
+                        <h1 class="text-center">Welcome to Magic Sender!</h1>
+                    </div>
+                </div>
+
+                {% if get_flashed_messages() %}
+                    <header>
+                        <div class="alert alert-danger border text-center" role="alert">
+                            {{ get_flashed_messages() | join(" ") }}
+                        </div>
+                    </header>
+                {% endif %}
+
+                <!-- Introduction to app -->
+                <div class="row topspace">
+                    <div class="col-sm-12 col-md-4 text-center">
+                        <span class="d-none d-lg-block">
+                            <br>
+                            <br>
+                            <h4 class="white">Magic Sender allows you to transfer any file from your mobile phone to your PC or between any kind of device without installing any software, it works in an easy way and no data is collected from you, this is a open source project, enjoy!</h4>
+                            <h4 class="white">Every file remains in the server during 24 hours (1440 minutes), when that time is over, the files are automatically deleted.</h4>
+                        </span>
+
+                        <span class="d-lg-none">
+                            <p class="white">Magic Sender allows you to transfer any file from your mobile phone to your PC or between any kind of device without installing any software, it works in an easy way and we don't collect any data from you, this is a open source project, enjoy!</p>
+                            <p class="white">Every file remains in the server during 24 hours (1440 minutes), when that time is over, the files are automatically deleted.</p>
+                        </span>
+                    </div>
+
+                    <div class="white col-sm-12 col-md-4 d-flex justify-content-center">
+                        <img src="../static/phone_image.png" alt="Phone image"/>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 d-flex justify-content-center">
+                        <form action="/" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="white" for="fileupload">Upload file</label>
+                                <input multiple id="fileupload" name="files[]" class="form-control-file white" type="file">
+                                <br>
+                                <input type="submit" class="btn btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Download-->
+                <div class="row orange">
+                    <div class="col-sm-12 col-md-12">
+                        <h2 class="text-center">Download</h2>
+                    </div>
+                </div>
+                    {% if not guestid %}
+                        <div class="row topspace d-flex justify-content-center">
+                                <form method="POST" action="/download">
+                                    <input class="form-control" placeholder="Insert ID" type="text" name="id">
+                                    <input type="submit" class="form-control btn-primary">
+                                </form>
+                        </div>
+
+                    {% else %}
+                        <div class="row orange">
+                            <div class="col-sm-12 col-md-12">
+                                <h4 class="text-center font-weight-bold text-success">User ID: {{guestid}}</h4>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% set ns1 = namespace(counter = 0) %}
+                    {% if guest_files %}
+                        {% for file in guest_files %}
+                        <form action="/uploads/{{guestid}}/{{file}}">
+                            <div class="row topspace">
+                                <div class="col-sm-3 topspace">
+                                    <button class="btn-success" type="submit">Download</button>
+                                </div>
+                                <div class="col-sm-4 topspace">
+                                    <p class="white font-weight-bold">{{file}}</p>
+                                    {% set filetype = file.split('.')[1].lower() %}
+                                    {% if filetype == "jpg" or filetype == "jpeg" %}
+                                        <img src="../static/icons/jpg.png" alt="jpg file" width="50px" height="75px"/>
+                                    {% elif filetype == "pdf" %}
+                                        <img src="../static/icons/pdf.png" alt="pdf file" width="50px" height="75px"/>
+                                    {% elif filetype == "doc" or filetype == "docx" %}
+                                        <img src="../static/icons/doc.png" alt="doc file" width="50px" height="75px"/>
+                                    {% elif filetype == "epub" %}
+                                        <img src="../static/icons/epub.png" alt="epub file" width="50px" height="75px"/>
+                                    {% elif filetype == "png" %}
+                                        <img src="../static/icons/png.png" alt="png file" width="50px" height="75px"/>
+                                    {% elif filetype == "mp4" or filetype == "mkv" or filetype == "mov" %}
+                                        <img src="../static/icons/video.png" alt="video file" width="50px" height="75px"/>
+                                    {% elif filetype == "ppt" or filetype == "pptx" %}
+                                        <img src="../static/icons/ppt.png" alt="ppt file" width="50px" height="75px"/>
+                                    {% elif filetype == "xls" or filetype == "xlsx" %}
+                                        <img src="../static/icons/xls.png" alt="xls file" width="50px" height="75px"/>
+                                    {% elif filetype == "txt" %}
+                                        <img src="../static/icons/txt.png" alt="txt file" width="50px" height="75px"/>
+                                    {% elif filetype == "psd" %}
+                                        <img src="../static/icons/psd.png" alt="psd file" width="50px" height="75px"/>
+                                    {% else %}
+                                        <img src="../static/icons/file.png" alt="file" width="50px" height="75px"/>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-1 topspace">
+                                    <label class="white">Elapsed time: {{ time2[ns1.counter] }} Minutes</label>
+                                </div>
+                            </div>
+                        </form>
+                        {% set ns1.counter = ns1.counter + 1 %}
+                        <hr class="btn-light">
+                        {% endfor %}
+                    {% else %}
+                        <br>
+                        <p class="white text-center">There are no guest files loaded yet</p>
+                    {% endif %}
+
+                <!-- Upload History -->
+                {% if userid and user_files %}
+                    <div class="row orange">
+                        <div class="col-sm-12 col-md-12">
+                            <h2 class="text-center">Uploads History <span class="font-weight-bold">({{ user_files|length }})</span></h2>
+                            <h4 class="text-center font-weight-bold text-success">User ID: {{userid}}</h4>
+                        </div>
+                    </div>
+
+                    {% set ns1 = namespace(counter = 0) %}
+                    {% for file in user_files %}
+                        <form id="delete{{file}}" method="post" action="/delete/{{userid}}/{{file}}"></form>
+                        <form id="upload{{file}}" action="/uploads/{{userid}}/{{file}}">
+                            <div class="row topspace">
+                                <div class="col-sm-4 topspace">
+                                    <p class="white font-weight-bold">{{file}}</p>
+
+                                    {% set filetype = file.split('.')[1].lower() %}
+                                    {% if filetype == "jpg" or filetype == "jpeg" %}
+                                        <img src="../static/icons/jpg.png" alt="jpg file" width="50px" height="75px"/>
+                                    {% elif filetype == "pdf" %}
+                                        <img src="../static/icons/pdf.png" alt="pdf file" width="50px" height="75px"/>
+                                    {% elif filetype == "doc" or filetype == "docx" %}
+                                        <img src="../static/icons/doc.png" alt="doc file" width="50px" height="75px"/>
+                                    {% elif filetype == "epub" %}
+                                        <img src="../static/icons/epub.png" alt="epub file" width="50px" height="75px"/>
+                                    {% elif filetype == "png" %}
+                                        <img src="../static/icons/png.png" alt="png file" width="50px" height="75px"/>
+                                    {% elif filetype == "mp4" or filetype == "mkv" or filetype == "mov" %}
+                                        <img src="../static/icons/video.png" alt="video file" width="50px" height="75px"/>
+                                    {% elif filetype == "ppt" or filetype == "pptx" %}
+                                        <img src="../static/icons/ppt.png" alt="ppt file" width="50px" height="75px"/>
+                                    {% elif filetype == "xls" or filetype == "xlsx" %}
+                                        <img src="../static/icons/xls.png" alt="xls file" width="50px" height="75px"/>
+                                    {% elif filetype == "txt" %}
+                                        <img src="../static/icons/txt.png" alt="txt file" width="50px" height="75px"/>
+                                    {% elif filetype == "psd" %}
+                                        <img src="../static/icons/psd.png" alt="psd file" width="50px" height="75px"/>
+                                    {% else %}
+                                        <img src="../static/icons/file.png" alt="psd file" width="50px" height="75px"/>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-sm-3 topspace">
+                                    <label class="white">Elapsed time: {{ time[ns1.counter] }} Minutes</label>
+                                </div>
+
+                                {% if time[ns1.counter] < 1440 %}
+                                    <div class="col-lg-2 col-md-2 col-sm-3 topspace">
+                                        <button class="btn-success" value="download" form="upload{{file}}" type="submit">Download</button>
+                                    </div>
+
+                                    <div class="col-lg-1 col-md-2 col-sm-1 topspace">
+                                        <button class="btn-danger" value="delete" type="submit" form="delete{{file}}">Delete</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <hr class="btn-light">
+                        </form>
+                        {% set ns1.counter = ns1.counter + 1 %}
+                    {% endfor %}
+                {% endif %}
+
+                <!-- About me -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 orange">
+                        <h2 class="text-center">Contact Me</h2>
+                    </div>
+                    <div class="col-sm-12 col-md-12">
+                        <span class="d-none d-lg-block">
+                            <h3 class="white">You can stay in touch with me through the following ways:</h3>
+                        </span>
+
+                        <span class="d-lg-none">
+                                <h4 class="white">You can stay in touch with me through the following ways:</h4>
+                        </span>
+                        <ul>
+                            <li class="white">
+
+                            <img src="../static/github_logo.png" alt="Github logo" width="60px" height="75px"/>
+                            Github: <a target="_blank" rel="noopener noreferrer" href="https://github.com/marcelodiaz558">@marcelodiaz558</a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="../static/jquery-3.3.1.slim.min.js"></script>
+        <script src="../static/popper.min.js"></script>
+        <script src="../static/bootstrap.min.js"></script>
+    </body>
+</html>
