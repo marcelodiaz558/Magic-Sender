@@ -7,12 +7,20 @@ from werkzeug.utils import secure_filename
 import datetime
 
 from helpers import uniqueid, unique_sequence, generateFileTimeList, allowed_file, os, time
+from os import mkdir
 
 # Configure application
 app = Flask(__name__)
 
 # Folder where all the files uploaded by the users will be stored
 USER_FOLDER = './static/users'
+
+# Create folder
+try:
+    mkdir(USER_FOLDER)
+except FileExistsError:
+    pass
+
 app.config['UPLOAD_FOLDER'] = USER_FOLDER
 
 # Ensure templates are auto-reloaded
